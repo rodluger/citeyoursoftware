@@ -1,4 +1,4 @@
-# citeyoursoftware
+# citeyoursoftware!
 
 Automatically generate ``BibTeX`` citations for all software explicitly
 defined in your ``conda`` environment. This tool scrapes information from
