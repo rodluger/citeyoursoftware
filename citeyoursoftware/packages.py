@@ -14,7 +14,9 @@ def get_user_packages(env_file="environment.yml", exclude=["python"]):
     with open(env_file, "r") as f:
         info = yaml.safe_load(f)
     conda_channels = info.get("channels", ["defaults"])
-    from_conda = [dep for dep in info.get("dependencies", []) if type(dep) is str]
+    from_conda = [
+        dep for dep in info.get("dependencies", []) if type(dep) is str
+    ]
     from_pypi = [
         item
         for sublist in [
@@ -25,16 +27,24 @@ def get_user_packages(env_file="environment.yml", exclude=["python"]):
         for item in sublist
     ]
     packages = {}
-    for source, channel in zip([from_conda, from_pypi], [conda_channels, "pypi"]):
+    for source, channel in zip(
+        [from_conda, from_pypi], [conda_channels, "pypi"]
+    ):
         for package in source:
             # Is this a GitHub-hosted package?
-            match = re.match("git\+https://github\.com/(.*?)/(.*?)\.git(.*?)$", package)
+            match = re.match(
+                "git\+https://github\.com/(.*?)/(.*?)\.git(.*?)$", package
+            )
             if match is not None:
                 user, name, _ = match.groups()
                 version = None
                 url = f"https://github\.com/{user}/{name}"
                 if name not in exclude:
-                    packages[name] = {"version": version, "channel": "git", "url": url}
+                    packages[name] = {
+                        "version": version,
+                        "channel": "git",
+                        "url": url,
+                    }
             else:
                 match = re.match("(.*?)([=<>!]+)(.*?)$", package)
                 if match is not None:
@@ -82,7 +92,9 @@ def get_conda_packages(env_path=None):
     return packages
 
 
-def get_packages(env_file="environment.yml", env_path=None, exclude=["python"]):
+def get_packages(
+    env_file="environment.yml", env_path=None, exclude=["python"]
+):
     """
     Returns a dictionary of packages listed by the user in a conda env file,
     annotated with the exact resolved version in the conda environment, the
@@ -105,10 +117,14 @@ def get_packages(env_file="environment.yml", env_path=None, exclude=["python"]):
     # Get all packages in the env
     conda_packages = get_conda_packages(env_path=env_path)
 
-    # Update the user-defined list with exact versions and channels
+    # Update the user-defined list with exact versions
+    # and channels, if available
     for package in packages:
-        packages[package]["version"] = conda_packages[package]["version"]
-        if conda_packages[package]["channel"] is not None:
-            packages[package]["channel"] = conda_packages[package]["channel"]
+        if package in conda_packages:
+            packages[package]["version"] = conda_packages[package]["version"]
+            if conda_packages[package]["channel"] is not None:
+                packages[package]["channel"] = conda_packages[package][
+                    "channel"
+                ]
 
     return packages
