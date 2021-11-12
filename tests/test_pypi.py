@@ -8,5 +8,5 @@ def test_emcee3():
 
     """
     bib = get_pypi_bib("emcee", version="3.1.1")
-    bib = parse_string(bib[0], "bibtex")
+    bib = parse_string(bib, "bibtex")
     assert bib.entries["emcee"].fields["title"] == "emcee: The MCMC Hammer"
