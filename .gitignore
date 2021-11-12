@@ -1,0 +1,3 @@
+citeyoursoftware/citeyoursoftware_version.py
+*.egg-info
+__pycache__
