@@ -6,7 +6,7 @@ __all__ = ["find_bibtex_in_string"]
 
 def get_closing_brace_index(string):
     """
-    Returns the index of the last closing bracek `{` in a BibTeX entry.
+    Returns the index of the last closing brace `{` in a BibTeX entry.
 
     """
     count = 0
