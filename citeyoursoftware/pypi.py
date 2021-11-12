@@ -8,6 +8,7 @@ __all__ = ["get_pypi_bib"]
 def get_pypi_bib(package, version=None):
     """
     Scrapes the PyPI ``description`` field of a package for BibTeX entries.
+    Returns a string.
 
     """
     if version is None:

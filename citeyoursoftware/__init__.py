@@ -1,3 +1,4 @@
+from . import github
 from . import main
 from . import packages
 from . import parser

@@ -22,10 +22,11 @@ def get_closing_brace_index(string):
 
 def find_bibtex_in_string(string):
     """
-    Returns a list of all valid BibTeX entries in a string.
+    Returns all valid BibTeX entries in a string.
 
     """
-    bib = []
+    bib = ""
+    sep = ""
     while True:
         match = re.search("@[a-z,A-Z]*{", string)
         if match is None:
@@ -34,8 +35,9 @@ def find_bibtex_in_string(string):
             start = match.span()[0]
             length = get_closing_brace_index(string[start:])
             if length:
-                bib.append(string[start : start + length + 1])
+                bib += sep + string[start : start + length + 1]
                 string = string[start + length + 1 :]
+                sep = "\n\n"
             else:
                 break
     return bib

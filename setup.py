@@ -18,7 +18,7 @@ setup(
         ),
         "write_to_template": '__version__ = "{version}"\n',
     },
-    install_requires=["setuptools_scm", "pyyaml", "pybtex"],
+    install_requires=["setuptools_scm", "pyyaml", "pybtex", "cffconvert"],
     entry_points={
         "console_scripts": ["cyfs=citeyoursoftware.main:entry_point"]
     },
