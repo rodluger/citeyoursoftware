@@ -21,8 +21,3 @@ def get_bibliography(
         # TODO!!!
 
     return packages
-
-
-def entry_point():
-    # TODO!
-    print("Coming soon!")

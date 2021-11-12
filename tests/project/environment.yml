@@ -1,0 +1,12 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7.3
+  - scipy>=1.5.2 # Github page (linked to on conda page) has CITATION.bib file with BibTeX
+  - pip=21.3.1
+  - pip:
+      - astropy=4.3.1 # Github page (linked to in description field) has astropy/CITATION file with BibTeX
+      - emcee>=3.0.0 # BibTeX in json description
+      - matplotlib # Link to webpage containing BibTeX
+      - git+https://github.com/rodluger/starry.git@2f42236039d4835b123bb7016109a89b839aa673#egg=starry # Github page has CITATION.cff file

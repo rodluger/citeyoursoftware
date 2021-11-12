@@ -51,8 +51,11 @@ def get_github_citation_cff(slug, commit_ish=None):
         # Replace the placeholder name with the package name
         repo = slug.split("/")[1]
         bib = bib.replace("YourReferenceHere", repo)
+
+        # Parse into a list
+        bib = find_bibtex_in_string(bib)
     else:
-        bib = ""
+        bib = []
 
     return bib
 
@@ -77,9 +80,37 @@ def get_github_citation_bib(slug, commit_ish=None):
         f"https://raw.githubusercontent.com/{slug}/{commit_ish}/CITATION.bib"
     )
     if r.status_code < 400:
-        bib = r.content.decode("utf-8")
+        bib = find_bibtex_in_string(r.content.decode("utf-8"))
     else:
-        bib = ""
+        bib = []
+
+    return bib
+
+
+def get_github_citation_astropy(slug, commit_ish=None):
+    """
+    Scrapes a GitHub repo for a repo/CITATION file (astropy convention).
+
+    """
+    if commit_ish is None:
+        # Get the default branch name
+        req = Request(f"https://api.github.com/repos/{slug}")
+        req.add_header("Accept", "application/vnd.github.v3+json")
+        req.add_header("Authorization", f"token {API_KEY}")
+        resp = urlopen(req)
+        content = resp.read()
+        content = json.loads(content)
+        commit_ish = content["default_branch"]
+
+    # Look for a `{repo}/CITATION` file & download it
+    repo = slug.split("/")[1]
+    r = requests.get(
+        f"https://raw.githubusercontent.com/{slug}/{commit_ish}/{repo}/CITATION"
+    )
+    if r.status_code < 400:
+        bib = find_bibtex_in_string(r.content.decode("utf-8"))
+    else:
+        bib = []
 
     return bib
 
@@ -89,11 +120,8 @@ def get_github_bib(slug, commit_ish=None):
     Scrapes a GitHub repo for citation information. Returns a BibTeX string.
 
     """
-    cff = get_github_citation_cff(slug, commit_ish)
-    bib = get_github_citation_bib(slug, commit_ish)
-    if len(cff) and len(bib):
-        return cff + "\n\n" + bib
-    elif len(cff):
-        return cff
-    else:
-        return bib
+    return (
+        get_github_citation_cff(slug, commit_ish)
+        + get_github_citation_bib(slug, commit_ish)
+        + get_github_citation_astropy(slug, commit_ish)
+    )

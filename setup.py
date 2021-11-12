@@ -20,7 +20,7 @@ setup(
     },
     install_requires=["setuptools_scm", "pyyaml", "pybtex", "cffconvert"],
     entry_points={
-        "console_scripts": ["cyfs=citeyoursoftware.main:entry_point"]
+        "console_scripts": ["cyfs=citeyoursoftware.entry_point:entry_point"]
     },
     setup_requires=["setuptools_scm"],
     include_package_data=True,
